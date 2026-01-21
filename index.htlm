@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Umbra Doku</title>
-    <!-- Bibliothèques de base (SANS ERREUR DE FORMATAGE) -->
     <script src="[https://unpkg.com/react@18/umd/react.production.min.js](https://unpkg.com/react@18/umd/react.production.min.js)"></script>
     <script src="[https://unpkg.com/react-dom@18/umd/react-dom.production.min.js](https://unpkg.com/react-dom@18/umd/react-dom.production.min.js)"></script>
     <script src="[https://unpkg.com/@babel/standalone/babel.min.js](https://unpkg.com/@babel/standalone/babel.min.js)"></script>
@@ -12,9 +11,7 @@
     <link href="[https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;700&display=swap](https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;700&display=swap)" rel="stylesheet">
     <style>
         body { background-color: #0D0D0F; color: #C4C4C4; font-family: 'Crimson Pro', serif; }
-        .font-serif { font-family: 'Crimson Pro', serif; }
         .bg-obsidian { background: radial-gradient(circle, #1A1A1E 0%, #0D0D0F 100%); }
-        .bg-papyrus { background-image: url("[https://www.transparenttextures.com/patterns/papyrus.png](https://www.transparenttextures.com/patterns/papyrus.png)"); }
     </style>
 </head>
 <body class="bg-[#0D0D0F]">
@@ -72,7 +69,7 @@
                                     {books.map(b => (
                                         <div key={b.id} onClick={() => setCurrent(b)} className="aspect-[3/4.5] bg-zinc-900 border border-zinc-800 p-6 cursor-pointer hover:border-red-900 transition-all flex flex-col items-center justify-center text-center shadow-2xl relative group">
                                             <div className="w-10 h-10 border border-current opacity-10 mb-4 group-hover:opacity-100 transition-opacity"></div>
-                                            <p className="text-[10px] uppercase tracking-wider line-clamp-3">{b.title}</p>
+                                            <p className="text-[10px] uppercase tracking-wider line-clamp-3 px-2">{b.title}</p>
                                         </div>
                                     ))}
                                 </div>
