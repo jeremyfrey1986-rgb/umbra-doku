@@ -80,7 +80,7 @@
                     ) : (
                         <div className="fixed inset-0 bg-black flex flex-col z-50">
                             <nav className="p-4 flex items-center justify-between border-b border-white/10 bg-zinc-950">
-                                <button onClick={() => setCurrent(null)} className="text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100">← Sanctuaire</button>
+                                <button onClick={() => setCurrent(null)} className="text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100 font-sans">← Sanctuaire</button>
                                 <span className="text-[10px] uppercase tracking-widest truncate max-w-xs">{current.title}</span>
                                 <div className="w-12"></div>
                             </nav>
