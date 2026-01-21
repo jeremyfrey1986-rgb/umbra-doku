@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Umbra Doku</title>
+    <!-- Bibliothèques de base -->
     <script src="[https://unpkg.com/react@18/umd/react.production.min.js](https://unpkg.com/react@18/umd/react.production.min.js)"></script>
     <script src="[https://unpkg.com/react-dom@18/umd/react-dom.production.min.js](https://unpkg.com/react-dom@18/umd/react-dom.production.min.js)"></script>
     <script src="[https://unpkg.com/@babel/standalone/babel.min.js](https://unpkg.com/@babel/standalone/babel.min.js)"></script>
     <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
     <link href="[https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;700&display=swap](https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;700&display=swap)" rel="stylesheet">
     <style>
+        body { background-color: #0D0D0F; color: #C4C4C4; font-family: 'Crimson Pro', serif; }
         .font-serif { font-family: 'Crimson Pro', serif; }
         .bg-obsidian { background: radial-gradient(circle, #1A1A1E 0%, #0D0D0F 100%); }
     </style>
@@ -17,44 +19,80 @@
 <body class="bg-[#0D0D0F]">
     <div id="root"></div>
     <script type="text/babel">
+        const { useState } = React;
+
+        const UmbraLogo = ({ className = "w-12 h-12" }) => (
+            <svg viewBox="0 0 100 100" className={className} fill="none">
+                <circle cx="50" cy="50" r="48" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 2" opacity="0.2" />
+                <g transform="translate(0, 5)">
+                    <ellipse cx="50" cy="65" rx="25" ry="18" fill="currentColor" fillOpacity="0.05" stroke="currentColor" strokeWidth="1" />
+                    <circle cx="50" cy="38" r="14" fill="currentColor" fillOpacity="0.05" stroke="currentColor" strokeWidth="1" />
+                    <circle cx="35" cy="20" r="7" fill="black" />
+                    <circle cx="65" cy="20" r="7" fill="black" />
+                    <path d="M40 48 H60 L65 65 H35 L40 48Z" fill="#580000" stroke="currentColor" strokeWidth="1" />
+                    <circle cx="35" cy="55" r="4" fill="currentColor" />
+                    <circle cx="65" cy="55" r="4" fill="currentColor" />
+                </g>
+            </svg>
+        );
+
         const App = () => {
-            const [books, setBooks] = React.useState([]);
-            const [current, setCurrent] = React.useState(null);
+            const [books, setBooks] = useState([]);
+            const [current, setCurrent] = useState(null);
 
             const upload = (e) => {
                 const f = e.target.files[0];
-                if (f) setBooks([...books, { id: Date.now(), title: f.name, url: URL.createObjectURL(f) }]);
+                if (f) {
+                    const url = URL.createObjectURL(f);
+                    setBooks([...books, { id: Date.now(), title: f.name.replace('.pdf', ''), url }]);
+                }
             };
 
             return (
-                <div className="min-h-screen text-slate-300 font-serif p-8">
+                <div className="min-h-screen text-slate-300 font-serif p-8 bg-obsidian">
                     {!current ? (
-                        <div className="max-w-4xl mx-auto">
-                            <header className="flex justify-between items-center border-b border-red-900/30 pb-8 mb-12">
-                                <h1 className="text-3xl tracking-widest uppercase text-red-800">Umbra Doku</h1>
-                                <label className="cursor-pointer border border-red-900 px-6 py-2 text-xs hover:bg-red-900 transition-all">
+                        <div className="max-w-5xl mx-auto">
+                            <header className="flex flex-col md:flex-row justify-between items-center border-b border-red-900/30 pb-8 mb-12 gap-6">
+                                <div className="flex items-center gap-4">
+                                    <UmbraLogo className="text-red-900" />
+                                    <h1 className="text-4xl tracking-widest uppercase text-red-800">Umbra Doku</h1>
+                                </div>
+                                <label className="cursor-pointer border border-red-900 px-8 py-3 text-xs tracking-widest hover:bg-red-900 hover:text-white transition-all">
                                     INVOQUER PDF <input type="file" accept=".pdf" className="hidden" onChange={upload} />
                                 </label>
                             </header>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                                {books.map(b => (
-                                    <div key={b.id} onClick={() => setCurrent(b)} className="aspect-[3/4] bg-zinc-900 border border-zinc-800 p-4 cursor-pointer hover:border-red-900 transition-all flex items-center justify-center text-center">
-                                        <p className="text-[10px] uppercase tracking-wider">{b.title}</p>
-                                    </div>
-                                ))}
-                            </div>
+                            
+                            {books.length === 0 ? (
+                                <div className="py-32 text-center opacity-20 italic tracking-widest">
+                                    Les étagères sont vides...
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
+                                    {books.map(b => (
+                                        <div key={b.id} onClick={() => setCurrent(b)} className="aspect-[3/4.5] bg-zinc-900 border border-zinc-800 p-6 cursor-pointer hover:border-red-900 transition-all flex flex-col items-center justify-center text-center shadow-2xl relative group">
+                                            <div className="w-10 h-10 border border-current opacity-10 mb-4 group-hover:opacity-100 transition-opacity"></div>
+                                            <p className="text-[10px] uppercase tracking-wider line-clamp-3">{b.title}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     ) : (
-                        <div className="fixed inset-0 bg-black flex flex-col">
-                            <button onClick={() => setCurrent(null)} className="p-4 text-[10px] uppercase tracking-widest opacity-50">← Retour</button>
+                        <div className="fixed inset-0 bg-black flex flex-col z-50">
+                            <nav className="p-4 flex items-center justify-between border-b border-white/10 bg-zinc-950">
+                                <button onClick={() => setCurrent(null)} className="text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100">← Sanctuaire</button>
+                                <span className="text-[10px] uppercase tracking-widest truncate max-w-xs">{current.title}</span>
+                                <div className="w-12"></div>
+                            </nav>
                             <object data={current.url} type="application/pdf" className="flex-1 w-full h-full"></object>
                         </div>
                     )}
                 </div>
             );
         };
-        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
-
